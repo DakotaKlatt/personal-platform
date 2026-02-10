@@ -22,7 +22,7 @@ export const experience: ExperienceEntry[] = [
     period: 'Oct 2021 – Present',
     location: 'Green Bay, WI',
     summary: [
-    'Software Engineer II Team Lead (Jan–Sept 2025); Software Engineer II (Oct 2021–Dec 2024).',
+    'Software Engineer II (Oct 2021–Jan 2025); Software Engineer II Team Lead (Jan 2025–Oct 2025); Senior Software Engineer (Oct 2025–Present).',
     'Technical lead on enterprise modernization consolidating five legacy systems into a unified microservices platform in logistics.',
     'Owned design and operations for 30+ microservices; authored 15+ from scratch; contributed across 200+ services.',
     'Built and operated real-time shipment tracking and event pipelines (primary 100K+ tx/hr; typical 30–50K tx/hr).',
