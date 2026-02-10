@@ -1,0 +1,48 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Button from '../components/Button.astro';
+import CopyEmail from '../components/CopyEmail.astro';
+---
+
+<PageLayout
+  title="Contact — Dakota Klatt"
+  description="Get in touch. Open to interesting conversations. Email and LinkedIn."
+>
+  <div class="mx-auto max-w-2xl px-6 py-section">
+    <h1 id="main-content" class="font-display font-semibold text-display-xl text-[var(--color-text)] mb-4">
+      Contact
+    </h1>
+    <p class="text-[var(--color-text-muted)] mb-8">
+      Open to interesting conversations—technical leadership, platform work, or collaboration. No form; just reach out.
+    </p>
+
+    <div class="space-y-6">
+      <div>
+        <p class="text-sm font-medium text-[var(--color-text-muted)] mb-2">Email</p>
+        <CopyEmail />
+      </div>
+      <div>
+        <p class="text-sm font-medium text-[var(--color-text-muted)] mb-2">LinkedIn</p>
+        <a
+          href="https://linkedin.com/in/dakota-klatt27"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-accent font-medium hover:underline"
+        >
+          linkedin.com/in/dakota-klatt27
+        </a>
+      </div>
+      <div>
+        <p class="text-sm font-medium text-[var(--color-text-muted)] mb-2">Location</p>
+        <p class="text-[var(--color-text)]">Green Bay, WI</p>
+      </div>
+    </div>
+
+    <div class="mt-10 pt-8 border-t border-[var(--color-border)]">
+      <p class="text-sm text-[var(--color-text-muted)] mb-4">
+        Resume available on request, or use the link below if you’ve added it.
+      </p>
+      <Button href="/resume.pdf" variant="secondary">Download resume (PDF)</Button>
+    </div>
+  </div>
+</PageLayout>

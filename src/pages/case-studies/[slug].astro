@@ -1,0 +1,28 @@
+---
+import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('case-studies');
+  return entries.map((entry) => ({
+    params: { slug: entry.id.replace(/\.(md|mdx)$/, '') },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+if (!entry) {
+  return Astro.redirect('/case-studies');
+}
+const { Content } = await render(entry);
+const { title, description, pubDate } = entry.data;
+---
+
+<CaseStudyLayout
+  title={title}
+  description={description}
+  pubDate={pubDate}
+  canonical={`https://dakotaklatt.com/case-studies/${entry.id.replace(/\.(md|mdx)$/, '')}`}
+>
+  <Content />
+</CaseStudyLayout>

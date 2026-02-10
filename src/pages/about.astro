@@ -1,0 +1,109 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Timeline from '../components/Timeline.astro';
+import { experience } from '../data/experience';
+import { skillGroups } from '../data/skills';
+---
+
+<PageLayout
+  title="About — Dakota Klatt"
+  description="Backend / Platform Engineer. What I do, how I think, and what I value. Skills in reliability, streaming, data, DevOps, and security."
+>
+  <div class="mx-auto max-w-5xl px-6 py-section">
+    {/* Press kit: headshot placeholder, short bio, quick links */}
+    <aside class="mb-section flex flex-wrap items-center gap-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)]/30 p-6" aria-label="Quick info">
+      <div class="h-24 w-24 shrink-0 rounded-full bg-[var(--color-border)] flex items-center justify-center text-[var(--color-text-muted)] text-sm">
+        Photo
+      </div>
+      <div>
+        <p class="font-display font-semibold text-[var(--color-text)]">Dakota Klatt</p>
+        <p class="text-sm text-[var(--color-text-muted)] mt-0.5">Backend / Platform Engineer · Event-driven systems at scale · Green Bay, WI</p>
+        <div class="mt-2 flex flex-wrap gap-4 text-sm">
+          <a href="mailto:DakotaKlatt27@gmail.com" class="text-accent hover:underline">Email</a>
+          <a href="https://linkedin.com/in/dakota-klatt27" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">LinkedIn</a>
+          <a href="/contact" class="text-accent hover:underline">Contact</a>
+        </div>
+      </div>
+    </aside>
+
+    <header class="mb-section">
+      <h1 id="main-content" class="font-display font-semibold text-display-xl text-[var(--color-text)] mb-4">
+        About
+      </h1>
+      <p class="text-xl text-[var(--color-text-muted)] max-w-2xl">
+        I build and operate systems that move data at scale. Event-driven, measurable, and built to last.
+      </p>
+    </header>
+
+    <section class="mb-section" aria-labelledby="narrative-heading">
+      <h2 id="narrative-heading" class="font-display font-semibold text-display-md text-[var(--color-text)] mb-4">
+        What I do & how I think
+      </h2>
+      <div class="prose-custom max-w-2xl text-[var(--color-text-muted)]">
+        <p>
+          I’ve spent six-plus years building event-driven microservices in Java and Spring Boot on Azure, with working proficiency in Python. My domain depth is in logistics and freight: shipment tracking, real-time events, pricing, and availability.
+        </p>
+        <p>
+          I care about reliability first—clear ownership, observability, and fixing root cause instead of symptoms. I’ve led technical efforts to consolidate five legacy systems into one microservices platform, owned design and ops for 30+ services, and run pipelines that handle 100K+ transactions per hour. I use Dynatrace, logs, and metrics to diagnose issues and tune data access and dependencies. Security and compliance (Snyk, ShiftLeft, license checks in CI) are part of the standard workflow, not an afterthought.
+        </p>
+        <p>
+          I value direct communication, metric-driven decisions, and shipping. I use AI tooling—Copilot, agent-based workflows—to move faster without cutting corners.
+        </p>
+      </div>
+    </section>
+
+    <section class="mb-section" aria-labelledby="personal-heading">
+      <h2 id="personal-heading" class="font-display font-semibold text-display-md text-[var(--color-text)] mb-4">
+        Personal
+      </h2>
+      <div class="prose-custom max-w-2xl text-[var(--color-text-muted)] mb-6">
+        <p>
+          Outside of work, I’m happiest doing something active or something I can build with my hands. In the winter that’s skiing and snowboarding; once the snow melts I’m mountain biking as often as I can. I like hobbies that reward consistency—show up, learn, get a little better—and it’s a great reset after a week of distributed systems, dashboards, and deployments.
+        </p>
+        <p>
+          I’m also a tinkerer. I mess with drones and radio-controlled vehicles, and knock out home renovation/DIY projects. And when I’m in a software mood, I build for fun too: indie game development (systems/mechanics) and small tools or automations that make my workflow smoother. Same theme across all of it: iterate, simplify, and ship.
+        </p>
+        <p>
+          I’m based in Green Bay, WI—Midwest weekends, four seasons, and any excuse to get outside.
+        </p>
+      </div>
+      <h3 class="font-display font-semibold text-[var(--color-text)] mb-3 text-base">Quick facts</h3>
+      <ul class="space-y-2 text-sm text-[var(--color-text-muted)] max-w-2xl">
+        <li><span class="text-[var(--color-text)] font-medium">Outside:</span> skiing, snowboarding, mountain biking</li>
+        <li><span class="text-[var(--color-text)] font-medium">Tinkering:</span> drones & radio-controlled vehicles, DIY/home projects</li>
+        <li><span class="text-[var(--color-text)] font-medium">Builder brain:</span> indie game dev + small tools/automation</li>
+      </ul>
+      <p class="mt-4">
+        <a href="/personal" class="text-accent font-medium hover:underline">Full personal section →</a>
+      </p>
+    </section>
+
+    <section class="mb-section" aria-labelledby="skills-heading">
+      <h2 id="skills-heading" class="font-display font-semibold text-display-md text-[var(--color-text)] mb-block">
+        Skills by outcome
+      </h2>
+      <div class="grid gap-6 sm:grid-cols-2">
+        {skillGroups.map((group) => (
+          <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
+            <h3 class="font-display font-semibold text-[var(--color-text)] mb-3">{group.title}</h3>
+            <ul class="space-y-2 text-sm text-[var(--color-text-muted)]">
+              {group.items.map((item) => (
+                <li class="flex items-start gap-2">
+                  <span class="text-accent shrink-0 mt-0.5" aria-hidden="true">·</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section aria-labelledby="timeline-heading">
+      <h2 id="timeline-heading" class="font-display font-semibold text-display-md text-[var(--color-text)] mb-block">
+        Timeline
+      </h2>
+      <Timeline entries={experience} />
+    </section>
+  </div>
+</PageLayout>

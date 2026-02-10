@@ -1,0 +1,141 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { projects, projectTags } from '../../data/projects';
+
+// Sort all projects (filtering happens client-side so static build works)
+const sorted = [...projects].sort((a, b) => {
+  const aOrder = a.featuredOrder ?? 999;
+  const bOrder = b.featuredOrder ?? 999;
+  if (aOrder !== bOrder) return aOrder - bOrder;
+  return (b.year ?? '').localeCompare(a.year ?? '');
+});
+---
+
+<PageLayout
+  title="Potential builds — Dakota Klatt"
+  description="Learning roadmap and project ideas: event-driven microservices, Kubernetes GitOps, LLM-assisted DevEx. Not started—planned learning targets to level up and showcase skills."
+>
+  <div class="mx-auto max-w-5xl px-6 py-section">
+    <header class="mb-block">
+      <h1 id="main-content" class="font-display font-semibold text-display-xl text-[var(--color-text)] mb-4">
+        Potential builds / learning roadmap
+      </h1>
+      <p class="text-[var(--color-text-muted)] max-w-2xl mb-2">
+        These are ideas and learning targets I’m considering—none of them are started yet. They’re a roadmap for skills I want to level up and demonstrate, not current or past work.
+      </p>
+      <p class="text-[var(--color-text-muted)] max-w-2xl text-sm">
+        Filter by focus area below.
+      </p>
+    </header>
+
+    <div class="flex flex-wrap gap-2 mb-8" role="group" aria-label="Filter by tag">
+      <a
+        href="/projects"
+        data-filter="all"
+        class="project-filter rounded-lg px-4 py-2 text-sm font-medium transition-colors border"
+      >
+        All
+      </a>
+      {projectTags.map((tag) => (
+        <a
+          href={`/projects?tag=${encodeURIComponent(tag)}`}
+          data-filter={tag}
+          class="project-filter rounded-lg px-4 py-2 text-sm font-medium transition-colors border"
+        >
+          {tag}
+        </a>
+      ))}
+    </div>
+
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" id="projects-grid">
+      {sorted.map((project) => (
+        <div
+          class="project-card-item"
+          data-tags={project.tags.join(',')}
+        >
+          <ProjectCard project={project} showHighlights={false} />
+        </div>
+      ))}
+    </div>
+
+    <p id="projects-empty" class="hidden text-[var(--color-text-muted)]">No projects match this filter.</p>
+
+    <p class="mt-10 pt-8 border-t border-[var(--color-border)] text-[var(--color-text-muted)] text-sm max-w-2xl">
+      If you’re interested in talking through these ideas, platform engineering, or what I’m learning next—reach out via <a href="https://linkedin.com/in/dakota-klatt27" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">LinkedIn</a> or <a href="mailto:DakotaKlatt27@gmail.com" class="text-accent hover:underline">email</a>. I’m open to interesting conversations.
+    </p>
+  </div>
+
+  <style>
+    .project-filter {
+      background: var(--color-surface-elevated);
+      color: var(--color-text-muted);
+      border-color: var(--color-border);
+    }
+    .project-filter:hover {
+      color: var(--color-text);
+    }
+    .project-filter.filter-active {
+      background: var(--color-accent);
+      color: white;
+      border-color: rgba(13, 148, 136, 0.4);
+    }
+  </style>
+
+  <script>
+    function getTagFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('tag');
+    }
+
+    function applyFilter(selectedTag) {
+      const grid = document.getElementById('projects-grid');
+      const emptyEl = document.getElementById('projects-empty');
+      const cards = grid?.querySelectorAll('.project-card-item') ?? [];
+      const filters = document.querySelectorAll('.project-filter');
+
+      let visibleCount = 0;
+      cards.forEach((el) => {
+        const tags = (el.getAttribute('data-tags') ?? '').split(',');
+        const show = !selectedTag || tags.includes(selectedTag);
+        el.hidden = !show;
+        if (show) visibleCount++;
+      });
+
+      if (emptyEl) emptyEl.classList.toggle('hidden', visibleCount > 0);
+
+      filters.forEach((a) => {
+        const filterTag = a.getAttribute('data-filter');
+        const isActive = (filterTag === 'all' && !selectedTag) || filterTag === selectedTag;
+        a.classList.toggle('filter-active', isActive);
+      });
+    }
+
+    function initFilters() {
+      applyFilter(getTagFromUrl());
+
+      document.querySelectorAll('.project-filter').forEach((a) => {
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          const tag = a.getAttribute('data-filter');
+          const url = new URL(window.location.href);
+          if (tag && tag !== 'all') {
+            url.searchParams.set('tag', tag);
+          } else {
+            url.search = '';
+          }
+          window.history.pushState({}, '', url.toString());
+          applyFilter(tag === 'all' ? null : tag);
+        });
+      });
+
+      window.addEventListener('popstate', () => applyFilter(getTagFromUrl()));
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initFilters);
+    } else {
+      initFilters();
+    }
+  </script>
+</PageLayout>

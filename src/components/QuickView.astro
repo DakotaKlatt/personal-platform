@@ -1,0 +1,115 @@
+---
+// Quick View: impact metrics + core stack + what I'm known for (<15 sec for recruiters)
+// For count-up: end value, suffix, and optional "count down" (e.g. 5→1)
+const metrics = [
+  { value: '100K+', label: 'tx/hr at peak', countEnd: 100, suffix: 'K+', countDown: false },
+  { value: '30+', label: 'microservices owned', countEnd: 30, suffix: '+', countDown: false },
+  { value: '200+', label: 'services contributed', countEnd: 200, suffix: '+', countDown: false },
+  { value: '5 → 1', label: 'legacy systems consolidated', countEnd: 5, suffix: ' → 1', countDown: false, countStart: 0 },
+];
+const stack = ['Java', 'Spring Boot', 'Kafka', 'Azure', 'Redis', 'MongoDB', 'Docker', 'K8s'];
+const knownFor = [
+  'Event-driven microservices at scale',
+  'Real-time pipelines & shipment tracking',
+  'Performance & reliability (Dynatrace, tuning)',
+  'Security in CI/CD (Snyk, ShiftLeft)',
+];
+---
+
+<section class="border-y border-[var(--color-border)] bg-[var(--color-surface-elevated)]/30 quick-view-section" aria-label="Quick view">
+  <div class="mx-auto max-w-5xl px-6 py-8">
+    <h2 class="sr-only">Quick view</h2>
+    <div class="grid gap-8 md:grid-cols-3">
+      <div>
+        <p class="text-xs font-medium uppercase tracking-wider text-[var(--color-text-muted)] mb-4">Impact</p>
+        <ul class="space-y-3">
+          {metrics.map((m) => (
+            <li class="flex items-baseline gap-2">
+              <span
+                class="font-display font-semibold text-[var(--color-text)] quick-view-count"
+                data-count-end={m.countEnd}
+                data-count-start={m.countDown ? m.countStart : 0}
+                data-suffix={m.suffix}
+                data-count-down={m.countDown ? 'true' : 'false'}
+                aria-hidden="true"
+              >
+                {m.countDown ? m.countStart : 0}{m.suffix}
+              </span>
+              <span class="text-sm text-[var(--color-text-muted)]">{m.label}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <p class="text-xs font-medium uppercase tracking-wider text-[var(--color-text-muted)] mb-4">Core stack</p>
+        <div class="flex flex-wrap gap-2">
+          {stack.map((s) => (
+            <span class="inline-flex items-center rounded-md bg-[var(--color-surface)] border border-[var(--color-border)] px-2.5 py-1 text-xs font-medium text-[var(--color-text)]">
+              {s}
+            </span>
+          ))}
+        </div>
+      </div>
+      <div>
+        <p class="text-xs font-medium uppercase tracking-wider text-[var(--color-text-muted)] mb-4">Known for</p>
+        <ul class="space-y-2 text-sm text-[var(--color-text-muted)]">
+          {knownFor.map((item) => (
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-0.5" aria-hidden="true">→</span>
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    const section = document.querySelector('.quick-view-section');
+    const counters = document.querySelectorAll('.quick-view-count');
+    if (!section || !counters.length) return;
+
+    const duration = 1200;
+    const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
+
+    function tickCounters() {
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      counters.forEach((el) => {
+        const end = Number(el.dataset.countEnd);
+        const start = Number(el.dataset.countStart) || 0;
+        const suffix = el.dataset.suffix || '';
+
+        if (reducedMotion) {
+          el.textContent = end + suffix;
+          return;
+        }
+
+        const startTime = performance.now();
+        function update(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = easeOutQuart(progress);
+          const current = Math.round(start + (end - start) * eased);
+          el.textContent = current + suffix;
+          if (progress < 1) requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
+      });
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            tickCounters();
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.2, rootMargin: '0px 0px -50px 0px' }
+    );
+    observer.observe(section);
+  })();
+</script>

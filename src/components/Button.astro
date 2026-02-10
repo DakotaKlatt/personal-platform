@@ -1,0 +1,27 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'ghost';
+  type?: 'button' | 'submit';
+  class?: string;
+  id?: string;
+}
+const { href, variant = 'primary', type = 'button', class: className = '', id } = Astro.props;
+const base = 'inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent';
+const variants = {
+  primary: 'bg-accent text-white hover:opacity-90 px-5 py-2.5',
+  secondary: 'bg-[var(--color-surface-elevated)] text-[var(--color-text)] border border-[var(--color-border)] hover:border-accent/50 px-5 py-2.5',
+  ghost: 'text-accent hover:bg-accent/10 px-4 py-2',
+};
+const combined = `${base} ${variants[variant]} ${className}`;
+---
+
+{href ? (
+  <a href={href} class={combined} id={id}>
+    <slot />
+  </a>
+) : (
+  <button type={type} class={combined} id={id}>
+    <slot />
+  </button>
+)}

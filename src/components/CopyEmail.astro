@@ -1,0 +1,36 @@
+---
+const email = 'DakotaKlatt27@gmail.com';
+---
+
+<div class="inline-flex items-center gap-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2">
+  <span class="text-sm text-[var(--color-text-muted)]" id="email-label">Email</span>
+  <code class="text-sm font-mono text-[var(--color-text)]">{email}</code>
+  <button
+    type="button"
+    class="ml-2 rounded px-2 py-1 text-xs font-medium text-accent hover:bg-accent/10 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+    data-copy-email={email}
+    aria-label="Copy email address"
+  >
+    Copy
+  </button>
+</div>
+<script>
+  document.querySelectorAll('[data-copy-email]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const email = (btn as HTMLButtonElement).dataset.copyEmail;
+      if (!email) return;
+      try {
+        await navigator.clipboard.writeText(email);
+        const label = btn.getAttribute('aria-label');
+        (btn as HTMLButtonElement).textContent = 'Copied';
+        (btn as HTMLButtonElement).setAttribute('aria-label', 'Copied');
+        setTimeout(() => {
+          (btn as HTMLButtonElement).textContent = 'Copy';
+          (btn as HTMLButtonElement).setAttribute('aria-label', label || 'Copy email address');
+        }, 2000);
+      } catch (_) {
+        (btn as HTMLButtonElement).textContent = 'Failed';
+      }
+    });
+  });
+</script>

@@ -1,0 +1,48 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import { getFeaturedProjects } from '../data/projects';
+const featured = getFeaturedProjects(6);
+---
+
+<PageLayout
+  title="Selected work & open source — Dakota Klatt"
+  description="Selected technical work and open source. Add repos and side projects here as you ship."
+>
+  <div class="mx-auto max-w-5xl px-6 py-section">
+    <h1 id="main-content" class="font-display font-semibold text-display-xl text-[var(--color-text)] mb-4">
+      Selected work
+    </h1>
+    <p class="text-[var(--color-text-muted)] max-w-2xl mb-block">
+      Highlights from my work. Open source and side projects can be added here—structure is ready for repos, links, and status.
+    </p>
+
+    <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)]/30 p-6 mb-block">
+      <h2 class="font-display font-semibold text-[var(--color-text)] mb-2">Featured projects</h2>
+      <p class="text-sm text-[var(--color-text-muted)] mb-4">
+        For full project list with filters, see <a href="/projects" class="text-accent hover:underline">Projects</a>.
+      </p>
+      <ul class="space-y-3">
+        {featured.map((p) => (
+          <li>
+            <a href="/projects" class="text-accent font-medium hover:underline">
+              {p.title}
+            </a>
+            <span class="text-[var(--color-text-muted)] text-sm"> — {p.outcome}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <section aria-labelledby="oss-heading">
+      <h2 id="oss-heading" class="font-display font-semibold text-display-md text-[var(--color-text)] mb-4">
+        Open source
+      </h2>
+      <p class="text-[var(--color-text-muted)] max-w-2xl">
+        Repos and contributions can be listed here. Add a card or list item per repo with link, description, and stack when you’re ready.
+      </p>
+      <p class="mt-4 text-sm text-[var(--color-text-muted)]">
+        To add a repo: edit <code class="bg-[var(--color-surface-elevated)] px-1.5 py-0.5 rounded">src/data/projects.ts</code> or create a small data file for OSS-only entries and render them in this section.
+      </p>
+    </section>
+  </div>
+</PageLayout>

@@ -1,0 +1,43 @@
+---
+interface Props {
+  type?: 'info' | 'tip' | 'warning';
+  title?: string;
+  class?: string;
+}
+const { type = 'info', title, class: className = '' } = Astro.props;
+const config = {
+  info: {
+    border: 'border-accent/40',
+    bg: 'bg-accent/5',
+    titleColor: 'text-accent',
+  },
+  tip: {
+    border: 'border-green-500/40',
+    bg: 'bg-green-500/5',
+    titleColor: 'text-green-600 dark:text-green-400',
+  },
+  warning: {
+    border: 'border-amber-500/40',
+    bg: 'bg-amber-500/5',
+    titleColor: 'text-amber-600 dark:text-amber-400',
+  },
+};
+const { border, bg, titleColor } = config[type];
+---
+
+<aside
+  class:list={[
+    'rounded-lg border-l-4 p-4 my-6',
+    border,
+    bg,
+    className,
+  ]}
+  role="note"
+>
+  {title && (
+    <p class={`font-semibold mb-2 ${titleColor}`}>{title}</p>
+  )}
+  <div class="prose-custom text-sm">
+    <slot />
+  </div>
+</aside>

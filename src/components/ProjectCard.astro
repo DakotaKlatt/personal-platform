@@ -1,0 +1,52 @@
+---
+import Card from './Card.astro';
+import Badge from './Badge.astro';
+import type { Project } from '../data/projects';
+
+interface Props {
+  project: Project;
+  showHighlights?: boolean;
+  animationDelay?: number;
+}
+const { project, showHighlights = false, animationDelay = 0 } = Astro.props;
+const href = project.comingSoon
+  ? undefined
+  : (project.caseStudySlug ? `/case-studies/${project.caseStudySlug}` : project.link ?? undefined);
+---
+
+<Card href={href} noAnimation={animationDelay === 0}>
+  <div
+    class="animate-fade-in-up"
+    style={`animation-delay: ${animationDelay}ms; animation-fill-mode: both;`}
+  >
+    <div class="flex flex-wrap items-center gap-2 mb-2">
+      {(project.comingSoon || project.status === 'idea') && (
+        <Badge label={project.status === 'idea' ? 'Idea (Not started)' : 'Coming soon'} variant="accent" />
+      )}
+      {project.tags.slice(0, 4).map((tag) => (
+        <Badge label={tag} variant="muted" />
+      ))}
+      {project.year && (
+        <span class="text-xs text-[var(--color-text-muted)] ml-auto">{project.year}</span>
+      )}
+    </div>
+    <h3 class="font-display font-semibold text-display-md text-[var(--color-text)] mb-2">
+      {project.title}
+    </h3>
+    <p class="text-[var(--color-text-muted)] text-sm leading-relaxed mb-4">
+      {project.outcome}
+    </p>
+    <div class="flex flex-wrap gap-1.5">
+      {project.stack.slice(0, 5).map((s) => (
+        <Badge label={s} variant="default" />
+      ))}
+    </div>
+    {showHighlights && project.highlights && project.highlights.length > 0 && (
+      <ul class="mt-4 space-y-1 text-sm text-[var(--color-text-muted)] list-disc list-inside">
+        {project.highlights.slice(0, 3).map((h) => (
+          <li>{h}</li>
+        ))}
+      </ul>
+    )}
+  </div>
+</Card>

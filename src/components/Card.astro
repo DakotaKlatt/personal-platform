@@ -1,0 +1,24 @@
+---
+interface Props {
+  href?: string;
+  class?: string;
+  /** For reduced motion: skip entrance animation delay */
+  noAnimation?: boolean;
+}
+const { href, class: className = '', noAnimation = false } = Astro.props;
+const Wrapper = href ? 'a' : 'div';
+const wrapperProps = href ? { href } : {};
+---
+
+<Wrapper
+  {...wrapperProps}
+  class:list={[
+    'block rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 transition-all duration-300',
+    'hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5',
+    !noAnimation && 'animate-fade-in-up',
+    className,
+  ]}
+  style={noAnimation ? undefined : { animationDelay: '0ms' }}
+>
+  <slot />
+</Wrapper>

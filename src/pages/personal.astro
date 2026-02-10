@@ -1,0 +1,72 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+---
+
+<PageLayout
+  title="Personal — Dakota Klatt"
+  description="Beyond work: skiing, snowboarding, mountain biking, indie game dev, side projects. Green Bay, WI. Progress and mastery on and off the clock."
+>
+  <div class="mx-auto max-w-3xl px-6 py-section">
+    <h1 id="main-content" class="font-display font-semibold text-display-xl text-[var(--color-text)] mb-4">
+      Personal
+    </h1>
+    <div class="prose-custom text-[var(--color-text-muted)] mb-section">
+      <p>
+        Outside of work, I’m happiest doing something active or something I can build with my hands. In the winter that’s skiing and snowboarding; once the snow melts I’m mountain biking as often as I can. I like hobbies that reward consistency—show up, learn, get a little better—and it’s a great reset after a week of distributed systems, dashboards, and deployments.
+      </p>
+      <p>
+        I’m also a tinkerer. I mess with drones and radio-controlled vehicles, and knock out home renovation/DIY projects. And when I’m in a software mood, I build for fun too: indie game development (systems/mechanics) and small tools or automations that make my workflow smoother. Same theme across all of it: iterate, simplify, and ship.
+      </p>
+      <p>
+        I’m based in Green Bay, WI—Midwest weekends, four seasons, and any excuse to get outside.
+      </p>
+      <h3 class="font-display font-semibold text-[var(--color-text)] mt-8 mb-3 text-base">Quick facts</h3>
+      <ul class="space-y-2 text-sm text-[var(--color-text-muted)]">
+        <li><span class="text-[var(--color-text)] font-medium">Outside:</span> skiing, snowboarding, mountain biking</li>
+        <li><span class="text-[var(--color-text)] font-medium">Tinkering:</span> drones & radio-controlled vehicles, DIY/home projects</li>
+        <li><span class="text-[var(--color-text)] font-medium">Builder brain:</span> indie game dev + small tools/automation</li>
+      </ul>
+    </div>
+
+    <section class="border-t border-[var(--color-border)] pt-section" aria-labelledby="photos-heading">
+      <h2 id="photos-heading" class="font-display font-semibold text-display-md text-[var(--color-text)] mb-6">
+        Photos
+      </h2>
+      <div class="grid gap-6 sm:grid-cols-3">
+        <figure class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)]/30 overflow-hidden">
+          <img
+            src="/images/personal-ski-group.png"
+            alt="Group of people standing in snow with skis and snowboards on a winter slope."
+            class="aspect-[4/3] w-full object-cover"
+            loading="lazy"
+          />
+          <figcaption class="p-3 text-sm text-[var(--color-text-muted)]">
+            <strong class="text-[var(--color-text)]">Winter reset.</strong> Time on the mountain with friends.
+          </figcaption>
+        </figure>
+        <figure class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)]/30 overflow-hidden">
+          <img
+            src="/images/personal-mtb-trail.png"
+            alt="Person riding a mountain bike off a small feature on a dirt trail."
+            class="aspect-[4/3] w-full object-cover"
+            loading="lazy"
+          />
+          <figcaption class="p-3 text-sm text-[var(--color-text-muted)]">
+            <strong class="text-[var(--color-text)]">Trail season.</strong> Pushing skills and balance on the bike.
+          </figcaption>
+        </figure>
+        <figure class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)]/30 overflow-hidden">
+          <img
+            src="/images/personal-ski-crew.png"
+            alt="Four people in helmets and winter gear standing near parked cars before a ski day."
+            class="aspect-[4/3] w-full object-cover"
+            loading="lazy"
+          />
+          <figcaption class="p-3 text-sm text-[var(--color-text-muted)]">
+            <strong class="text-[var(--color-text)]">Trip crew.</strong> The people side of weekend adventures.
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+  </div>
+</PageLayout>

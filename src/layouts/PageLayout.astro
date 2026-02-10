@@ -1,0 +1,26 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  image?: string;
+  noIndex?: boolean;
+}
+const props = Astro.props;
+---
+
+<BaseLayout {...props}>
+  <a href="#main-content" class="skip-link">
+    Skip to main content
+  </a>
+  <Header />
+  <main id="main-content" tabIndex={-1}>
+    <slot />
+  </main>
+  <Footer />
+</BaseLayout>
