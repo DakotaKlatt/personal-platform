@@ -1,6 +1,5 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
-import Button from '../components/Button.astro';
 import CopyEmail from '../components/CopyEmail.astro';
 ---
 
@@ -40,9 +39,15 @@ import CopyEmail from '../components/CopyEmail.astro';
 
     <div class="mt-10 pt-8 border-t border-[var(--color-border)]">
       <p class="text-sm text-[var(--color-text-muted)] mb-4">
-        Resume available on request, or use the link below if you’ve added it.
+        Download my resume (PDF) below.
       </p>
-      <Button href="/resume.pdf" variant="secondary">Download resume (PDF)</Button>
+      <a
+        href="/resume.pdf"
+        download="Dakota_Klatt_Resume.pdf"
+        class="inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-200 bg-[var(--color-surface-elevated)] text-[var(--color-text)] border border-[var(--color-border)] hover:border-accent/50 px-5 py-2.5"
+      >
+        Download resume (PDF)
+      </a>
     </div>
   </div>
 </PageLayout>
