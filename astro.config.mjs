@@ -5,6 +5,7 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://dakotaklatt.com',
+  server: { host: true },
   integrations: [
     tailwind(),
     mdx(),

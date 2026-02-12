@@ -9,12 +9,14 @@ interface Props {
   animationDelay?: number;
 }
 const { project, showHighlights = false, animationDelay = 0 } = Astro.props;
-const href = project.comingSoon
+const mainHref = project.comingSoon || project.status === 'idea'
   ? undefined
-  : (project.caseStudySlug ? `/case-studies/${project.caseStudySlug}` : project.link ?? undefined);
+  : (project.link ?? project.repo ?? undefined);
+// Avoid nesting <a> inside <a>: when there's a setupLink, don't make the whole card a link
+const cardHref = project.setupLink ? undefined : mainHref;
 ---
 
-<Card href={href} noAnimation={animationDelay === 0}>
+<Card href={cardHref} noAnimation={animationDelay === 0}>
   <div
     class="animate-fade-in-up"
     style={`animation-delay: ${animationDelay}ms; animation-fill-mode: both;`}
@@ -31,7 +33,11 @@ const href = project.comingSoon
       )}
     </div>
     <h3 class="font-display font-semibold text-display-md text-[var(--color-text)] mb-2">
-      {project.title}
+      {!cardHref && mainHref ? (
+        <a href={mainHref} target="_blank" rel="noopener noreferrer" class="hover:text-accent transition-colors">{project.title}</a>
+      ) : (
+        project.title
+      )}
     </h3>
     <p class="text-[var(--color-text-muted)] text-sm leading-relaxed mb-4">
       {project.outcome}
@@ -41,6 +47,11 @@ const href = project.comingSoon
         <Badge label={s} variant="default" />
       ))}
     </div>
+    {project.setupLink && (
+      <p class="mt-3 text-sm">
+        <a href={project.setupLink} target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">Clone & run locally →</a>
+      </p>
+    )}
     {showHighlights && project.highlights && project.highlights.length > 0 && (
       <ul class="mt-4 space-y-1 text-sm text-[var(--color-text-muted)] list-disc list-inside">
         {project.highlights.slice(0, 3).map((h) => (

@@ -3,8 +3,9 @@ import PageLayout from '../layouts/PageLayout.astro';
 import QuickView from '../components/QuickView.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import Button from '../components/Button.astro';
-import { getFeaturedProjects } from '../data/projects';
-const featured = getFeaturedProjects(6);
+import { getRealProjects, getIdeaProjects } from '../data/projects';
+const realProjects = getRealProjects();
+const ideaProjects = getIdeaProjects();
 ---
 
 <PageLayout
@@ -34,14 +35,14 @@ const featured = getFeaturedProjects(6);
 
   <QuickView />
 
-  {/* Potential builds */}
+  {/* Projects */}
   <section class="py-section" aria-labelledby="featured-heading">
     <div class="mx-auto max-w-5xl px-6">
       <h2 id="featured-heading" class="font-display font-semibold text-display-lg text-[var(--color-text)] mb-block">
-        Potential builds
+        Projects
       </h2>
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {featured.map((project, i) => (
+        {realProjects.map((project, i) => (
           <ProjectCard
             project={project}
             showHighlights={false}
@@ -49,8 +50,21 @@ const featured = getFeaturedProjects(6);
           />
         ))}
       </div>
-      <div class="mt-8 text-center">
-        <Button href="/projects" variant="ghost">Learning roadmap →</Button>
+      <div id="home-idea-projects" class="hidden mt-8">
+        <h3 class="font-display font-semibold text-[var(--color-text)] mb-4">Potential future project ideas</h3>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {ideaProjects.map((project, i) => (
+            <ProjectCard project={project} showHighlights={false} />
+          ))}
+        </div>
+      </div>
+      <div class="mt-6 text-center">
+        <button type="button" id="home-toggle-ideas" class="text-sm font-medium text-accent hover:underline">
+          Show potential future project ideas
+        </button>
+      </div>
+      <div class="mt-6 text-center">
+        <Button href="/projects" variant="ghost">All projects →</Button>
       </div>
     </div>
   </section>
@@ -86,6 +100,17 @@ const featured = getFeaturedProjects(6);
       <Button href="/personal" variant="ghost">More about me →</Button>
     </div>
   </section>
+
+  <script>
+    document.getElementById('home-toggle-ideas')?.addEventListener('click', function () {
+      const block = document.getElementById('home-idea-projects');
+      const btn = document.getElementById('home-toggle-ideas');
+      if (!block || !btn) return;
+      const isHidden = block.classList.contains('hidden');
+      block.classList.toggle('hidden', !isHidden);
+      btn.textContent = isHidden ? 'Hide potential future project ideas' : 'Show potential future project ideas';
+    });
+  </script>
 
   {/* Now */}
   <section class="py-section" aria-labelledby="now-heading">

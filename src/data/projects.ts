@@ -1,27 +1,44 @@
 /**
- * Projects: potential builds / learning roadmap.
- * These are ideas, not started. Honest, recruiter-friendly, ATS keyword rich.
+ * Projects: shipped/active projects + potential builds (ideas).
+ * Real projects show by default; idea projects hidden behind "Show potential future project ideas".
  */
 
-export type ProjectStatus = 'idea';
+export type ProjectStatus = 'idea' | 'shipped' | 'active';
 
 export interface Project {
   id: string;
   title: string;
   slug: string;
-  /** One sentence: what it would be */
   outcome: string;
-  /** One sentence: skills it would showcase (keywords) */
-  whyItMatters: string;
+  whyItMatters?: string;
   stack: string[];
   tags: string[];
   status: ProjectStatus;
   comingSoon?: boolean;
   featuredOrder?: number;
   highlights?: string[];
+  /** Live demo URL */
+  link?: string;
+  /** Repo URL */
+  repo?: string;
+  /** Optional: link to README section (e.g. clone and run) */
+  setupLink?: string;
+  year?: string;
 }
 
 export const projects: Project[] = [
+  {
+    id: 'opencut-studio',
+    title: 'OpenCut Studio',
+    slug: 'opencut-studio',
+    outcome: 'Transcript-based web video editor. Cut video by selecting text in the transcript and export the edited MP4. Supports optional local transcription via faster-whisper (no API keys).',
+    stack: ['Next.js', 'TypeScript', 'Fastify', 'BullMQ', 'Redis', 'Postgres', 'Prisma', 'ffmpeg', 'faster-whisper'],
+    tags: ['Backend', 'Full-stack', 'DevOps', 'Data'],
+    status: 'shipped',
+    featuredOrder: 0,
+    repo: 'https://github.com/DakotaKlatt/OpenCutStudio',
+    setupLink: 'https://github.com/DakotaKlatt/OpenCutStudio#clone-and-run-locally',
+  },
   {
     id: 'event-driven-reference-stack',
     title: 'Event-driven microservices reference stack',
@@ -50,7 +67,7 @@ export const projects: Project[] = [
     id: 'llm-ops-devex-helper',
     title: 'LLM-assisted ops / DevEx helper',
     slug: 'llm-ops-devex-helper',
-    outcome: 'An idea for a developer-experience tool that would use RAG over synthetic logs/traces only to support incident analysis and “what to check next” in a privacy-safe way.',
+    outcome: 'An idea for a developer-experience tool that would use RAG over synthetic logs/traces only to support incident analysis and "what to check next" in a privacy-safe way.',
     whyItMatters: 'Would showcase developer experience, tooling, RAG, evaluation harness, incident analysis, privacy-safe design, and automation.',
     stack: ['Python', 'RAG', 'LLM', 'Synthetic data'],
     tags: ['AI', 'DevEx', 'Observability'],
@@ -64,11 +81,28 @@ export const projectTags = Array.from(
   new Set(projects.flatMap((p) => p.tags))
 ).sort();
 
-export function getFeaturedProjects(limit = 6): Project[] {
+/** Real projects (shipped or active), for default view */
+export function getRealProjects(): Project[] {
   return projects
-    .filter((p) => p.featuredOrder != null)
-    .sort((a, b) => (a.featuredOrder ?? 99) - (b.featuredOrder ?? 99))
-    .slice(0, limit);
+    .filter((p) => p.status !== 'idea')
+    .sort((a, b) => (a.featuredOrder ?? 99) - (b.featuredOrder ?? 99));
+}
+
+/** Idea / potential builds only */
+export function getIdeaProjects(): Project[] {
+  return projects
+    .filter((p) => p.status === 'idea')
+    .sort((a, b) => (a.featuredOrder ?? 99) - (b.featuredOrder ?? 99));
+}
+
+/** Featured: real projects first, then ideas (for homepage when showing both) */
+export function getFeaturedProjects(limit = 6): Project[] {
+  return [...getRealProjects(), ...getIdeaProjects()].slice(0, limit);
+}
+
+/** All projects sorted (real first) */
+export function getAllProjectsSorted(): Project[] {
+  return [...getRealProjects(), ...getIdeaProjects()];
 }
 
 export function getProjectBySlug(slug: string): Project | undefined {

@@ -1,31 +1,25 @@
 ---
 import PageLayout from '../../layouts/PageLayout.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
-import { projects, projectTags } from '../../data/projects';
+import { getAllProjectsSorted, projectTags } from '../../data/projects';
 
-// Sort all projects (filtering happens client-side so static build works)
-const sorted = [...projects].sort((a, b) => {
-  const aOrder = a.featuredOrder ?? 999;
-  const bOrder = b.featuredOrder ?? 999;
-  if (aOrder !== bOrder) return aOrder - bOrder;
-  return (b.year ?? '').localeCompare(a.year ?? '');
-});
+const sorted = getAllProjectsSorted();
 ---
 
 <PageLayout
-  title="Potential builds — Dakota Klatt"
-  description="Learning roadmap and project ideas: event-driven microservices, Kubernetes GitOps, LLM-assisted DevEx. Not started—planned learning targets to level up and showcase skills."
+  title="Projects — Dakota Klatt"
+  description="Projects and side builds: OpenCut Studio and more. Optional learning roadmap for potential future ideas."
 >
   <div class="mx-auto max-w-5xl px-6 py-section">
     <header class="mb-block">
       <h1 id="main-content" class="font-display font-semibold text-display-xl text-[var(--color-text)] mb-4">
-        Potential builds / learning roadmap
+        Projects
       </h1>
       <p class="text-[var(--color-text-muted)] max-w-2xl mb-2">
-        These are ideas and learning targets I’m considering—none of them are started yet. They’re a roadmap for skills I want to level up and demonstrate, not current or past work.
+        Shipped projects and side builds. Filter by focus area below.
       </p>
       <p class="text-[var(--color-text-muted)] max-w-2xl text-sm">
-        Filter by focus area below.
+        Optional: potential future project ideas are hidden by default—use the button below to show them.
       </p>
     </header>
 
@@ -53,6 +47,7 @@ const sorted = [...projects].sort((a, b) => {
         <div
           class="project-card-item"
           data-tags={project.tags.join(',')}
+          data-is-idea={project.status === 'idea' ? 'true' : 'false'}
         >
           <ProjectCard project={project} showHighlights={false} />
         </div>
@@ -61,8 +56,21 @@ const sorted = [...projects].sort((a, b) => {
 
     <p id="projects-empty" class="hidden text-[var(--color-text-muted)]">No projects match this filter.</p>
 
-    <p class="mt-10 pt-8 border-t border-[var(--color-border)] text-[var(--color-text-muted)] text-sm max-w-2xl">
-      If you’re interested in talking through these ideas, platform engineering, or what I’m learning next—reach out via <a href="https://linkedin.com/in/dakota-klatt27" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">LinkedIn</a> or <a href="mailto:DakotaKlatt27@gmail.com" class="text-accent hover:underline">email</a>. I’m open to interesting conversations.
+    <div class="mt-10 pt-8 border-t border-[var(--color-border)]">
+      <button
+        type="button"
+        id="toggle-idea-projects"
+        class="text-sm font-medium text-accent hover:underline"
+      >
+        Show potential future project ideas
+      </button>
+      <p id="idea-projects-hint" class="hidden mt-2 text-xs text-[var(--color-text-muted)]">
+        (Click again to hide)
+      </p>
+    </div>
+
+    <p class="mt-6 text-[var(--color-text-muted)] text-sm max-w-2xl">
+      If you’re interested in talking through these projects, platform engineering, or what I’m building next—reach out via <a href="https://linkedin.com/in/dakota-klatt27" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">LinkedIn</a> or <a href="mailto:DakotaKlatt27@gmail.com" class="text-accent hover:underline">email</a>. I’m open to interesting conversations.
     </p>
   </div>
 
@@ -80,9 +88,14 @@ const sorted = [...projects].sort((a, b) => {
       color: white;
       border-color: rgba(13, 148, 136, 0.4);
     }
+    .project-card-item[data-is-idea="true"].idea-hidden {
+      display: none !important;
+    }
   </style>
 
   <script>
+    let showIdeas = false;
+
     function getTagFromUrl() {
       const params = new URLSearchParams(window.location.search);
       return params.get('tag');
@@ -96,9 +109,11 @@ const sorted = [...projects].sort((a, b) => {
 
       let visibleCount = 0;
       cards.forEach((el) => {
-        const tags = (el.getAttribute('data-tags') ?? '').split(',');
-        const show = !selectedTag || tags.includes(selectedTag);
+        const isIdea = el.getAttribute('data-is-idea') === 'true';
+        const tagMatch = !selectedTag || (el.getAttribute('data-tags') ?? '').split(',').includes(selectedTag);
+        const show = tagMatch && (showIdeas || !isIdea);
         el.hidden = !show;
+        el.classList.toggle('idea-hidden', isIdea && !showIdeas);
         if (show) visibleCount++;
       });
 
@@ -111,8 +126,16 @@ const sorted = [...projects].sort((a, b) => {
       });
     }
 
+    function updateToggleButton() {
+      const btn = document.getElementById('toggle-idea-projects');
+      const hint = document.getElementById('idea-projects-hint');
+      if (btn) btn.textContent = showIdeas ? 'Hide potential future project ideas' : 'Show potential future project ideas';
+      if (hint) hint.classList.toggle('hidden', !showIdeas);
+    }
+
     function initFilters() {
       applyFilter(getTagFromUrl());
+      updateToggleButton();
 
       document.querySelectorAll('.project-filter').forEach((a) => {
         a.addEventListener('click', (e) => {
@@ -127,6 +150,12 @@ const sorted = [...projects].sort((a, b) => {
           window.history.pushState({}, '', url.toString());
           applyFilter(tag === 'all' ? null : tag);
         });
+      });
+
+      document.getElementById('toggle-idea-projects')?.addEventListener('click', () => {
+        showIdeas = !showIdeas;
+        applyFilter(getTagFromUrl());
+        updateToggleButton();
       });
 
       window.addEventListener('popstate', () => applyFilter(getTagFromUrl()));
